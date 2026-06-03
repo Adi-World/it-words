@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IT Vokabeln – Informatiker Plattformentwickler</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0f1117;
+    --bg2: #181c27;
+    --bg3: #1e2332;
+    --border: #2a3047;
+    --text: #e8eaf2;
+    --text2: #8b92ad;
+    --text3: #525870;
+    --accent: #4f7bff;
+    --accent-dim: #1a2a5e;
+    --green: #2dd4a0;
+    --green-dim: #0d3326;
+    --coral: #ff6b6b;
+    --coral-dim: #3d1515;
+    --amber: #f5a623;
+    --amber-dim: #3a2500;
+    --purple: #a78bfa;
+    --purple-dim: #2a1a4a;
+    --radius: 10px;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'Inter', sans-serif;
+  }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  /* Header */
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: var(--bg2);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .logo-badge {
+    background: var(--accent);
+    color: #fff;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 6px;
+    letter-spacing: 0.05em;
+  }
+  header h1 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  header p {
+    font-size: 13px;
+    color: var(--text2);
+    margin-left: auto;
+  }
+
+  /* Main layout */
+  main {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  /* Controls */
+  .controls {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .search-wrap {
+    position: relative;
+    flex: 1;
+    min-width: 200px;
+  }
+  .search-wrap svg {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text3);
+    pointer-events: none;
+  }
+  input[type="text"] {
+    width: 100%;
+    padding: 10px 12px 10px 38px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-size: 14px;
+    font-family: var(--sans);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  input[type="text"]:focus { border-color: var(--accent); }
+  input[type="text"]::placeholder { color: var(--text3); }
+
+  .cat-filters {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .cat-btn {
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text2);
+    font-size: 12px;
+    font-family: var(--sans);
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .cat-btn:hover { border-color: var(--accent); color: var(--text); }
+  .cat-btn.active { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); font-weight: 500; }
+
+  /* Stats bar */
+  .stats-bar {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .stat-pill {
+    font-size: 12px;
+    color: var(--text3);
+    font-family: var(--mono);
+  }
+  .stat-pill span { color: var(--text2); font-weight: 500; }
+
+  /* View toggle */
+  .view-toggle {
+    display: flex;
+    gap: 6px;
+    margin-left: auto;
+  }
+  .view-btn {
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text3);
+    font-size: 12px;
+    font-family: var(--sans);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .view-btn.active { background: var(--bg3); border-color: var(--border); color: var(--text); }
+
+  /* TABLE VIEW */
+  .table-wrap { overflow-x: auto; border-radius: var(--radius); border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead tr { background: var(--bg3); }
+  th {
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--bg2); }
+  .en-word { font-family: var(--mono); font-weight: 500; color: var(--text); font-size: 13px; }
+  .de-word { color: var(--text2); font-size: 12px; margin-top: 2px; }
+  .sentence-en { color: var(--text); font-size: 12px; line-height: 1.5; }
+  .sentence-de { color: var(--text2); font-size: 11px; margin-top: 3px; line-height: 1.5; font-style: italic; }
+  .num-cell { color: var(--text3); font-family: var(--mono); font-size: 11px; width: 30px; }
+
+  /* CARD VIEW */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 14px;
+  }
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem 1.25rem;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    position: relative;
+  }
+  .card:hover { border-color: var(--accent); background: var(--bg3); }
+  .card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+  .card-num { font-family: var(--mono); font-size: 10px; color: var(--text3); }
+  .card-en { font-family: var(--mono); font-size: 17px; font-weight: 500; color: var(--text); }
+  .card-de { font-size: 13px; color: var(--text2); margin-bottom: 10px; }
+  .card-divider { height: 1px; background: var(--border); margin-bottom: 10px; }
+  .card-sentence-en { font-size: 12px; color: var(--text); line-height: 1.55; }
+  .card-sentence-de { font-size: 11px; color: var(--text2); margin-top: 4px; line-height: 1.55; font-style: italic; }
+
+  /* FLASHCARD VIEW */
+  .flashcard-section { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; }
+  .fc-progress { display: flex; gap: 4px; flex-wrap: wrap; justify-content: center; max-width: 600px; }
+  .fc-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); transition: background 0.3s; }
+  .fc-dot.seen { background: var(--accent); }
+  .fc-dot.current { background: var(--green); }
+
+  .flashcard {
+    width: 100%;
+    max-width: 560px;
+    min-height: 300px;
+    perspective: 1000px;
+    cursor: pointer;
+  }
+  .fc-inner {
+    width: 100%; height: 100%; min-height: 300px;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.5s ease;
+  }
+  .fc-inner.flipped { transform: rotateY(180deg); }
+  .fc-front, .fc-back {
+    position: absolute;
+    width: 100%; min-height: 300px;
+    backface-visibility: hidden;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2.5rem;
+    text-align: center;
+  }
+  .fc-front { background: var(--bg2); }
+  .fc-back { background: var(--bg3); transform: rotateY(180deg); }
+  .fc-label { font-size: 11px; color: var(--text3); font-family: var(--mono); margin-bottom: 1rem; letter-spacing: 0.1em; text-transform: uppercase; }
+  .fc-main { font-family: var(--mono); font-size: 28px; font-weight: 500; color: var(--text); margin-bottom: 0.5rem; }
+  .fc-sub { font-size: 14px; color: var(--text2); margin-bottom: 1rem; }
+  .fc-sentence { font-size: 13px; color: var(--text2); line-height: 1.6; max-width: 400px; }
+  .fc-hint { font-size: 12px; color: var(--text3); margin-top: 1.5rem; }
+
+  .fc-controls { display: flex; gap: 12px; }
+  .fc-btn {
+    padding: 10px 24px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text);
+    font-size: 14px;
+    font-family: var(--sans);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .fc-btn:hover { background: var(--bg3); border-color: var(--accent); }
+  .fc-btn.primary { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); font-weight: 500; }
+  .fc-counter { font-size: 13px; color: var(--text2); font-family: var(--mono); }
+
+  /* Category badges */
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .cat-Infrastruktur { background: var(--accent-dim); color: var(--accent); border: 1px solid var(--accent-dim); }
+  .cat-Entwicklung { background: var(--purple-dim); color: var(--purple); border: 1px solid var(--purple-dim); }
+  .cat-Daten { background: var(--green-dim); color: var(--green); border: 1px solid var(--green-dim); }
+  .cat-Sicherheit { background: var(--coral-dim); color: var(--coral); border: 1px solid var(--coral-dim); }
+  .cat-Prozesse { background: var(--amber-dim); color: var(--amber); border: 1px solid var(--amber-dim); }
+
+  /* No results */
+  .no-results { text-align: center; padding: 4rem; color: var(--text3); font-size: 14px; }
+
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-badge">&lt;IT/&gt;</div>
+  <h1>Informatiker Plattformentwickler – Fachvokabular</h1>
+  <p>50 Wörter · EN / DE</p>
+</header>
+
+<main>
+  <div class="controls">
+    <div class="search-wrap">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="search" placeholder="Suchen auf Englisch oder Deutsch…">
+    </div>
+    <div class="cat-filters" id="cat-filters">
+      <button class="cat-btn active" data-cat="">Alle</button>
+      <button class="cat-btn" data-cat="Infrastruktur">Infrastruktur</button>
+      <button class="cat-btn" data-cat="Entwicklung">Entwicklung</button>
+      <button class="cat-btn" data-cat="Daten">Daten</button>
+      <button class="cat-btn" data-cat="Sicherheit">Sicherheit</button>
+      <button class="cat-btn" data-cat="Prozesse">Prozesse</button>
+    </div>
+    <div class="view-toggle">
+      <button class="view-btn active" data-view="table">Tabelle</button>
+      <button class="view-btn" data-view="cards">Karten</button>
+      <button class="view-btn" data-view="flash">Lernkarten</button>
+    </div>
+  </div>
+
+  <div class="stats-bar" id="stats-bar">
+    <div class="stat-pill">Angezeigt: <span id="count-shown">50</span> / 50</div>
+    <div class="stat-pill">Infrastruktur: <span>15</span></div>
+    <div class="stat-pill">Entwicklung: <span>16</span></div>
+    <div class="stat-pill">Daten: <span>5</span></div>
+    <div class="stat-pill">Sicherheit: <span>5</span></div>
+    <div class="stat-pill">Prozesse: <span>9</span></div>
+  </div>
+
+  <!-- TABLE VIEW -->
+  <div id="view-table">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>English</th>
+            <th>Deutsch</th>
+            <th>Kategorie</th>
+            <th>Example sentence (EN)</th>
+            <th>Übersetzung (DE)</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+      <div class="no-results hidden" id="no-results-table">Keine Ergebnisse gefunden.</div>
+    </div>
+  </div>
+
+  <!-- CARDS VIEW -->
+  <div id="view-cards" class="hidden">
+    <div class="cards-grid" id="cards-grid"></div>
+    <div class="no-results hidden" id="no-results-cards">Keine Ergebnisse gefunden.</div>
+  </div>
+
+  <!-- FLASHCARD VIEW -->
+  <div id="view-flash" class="hidden">
+    <div class="flashcard-section">
+      <div class="fc-progress" id="fc-progress"></div>
+      <div class="flashcard" id="flashcard" onclick="flipCard()">
+        <div class="fc-inner" id="fc-inner">
+          <div class="fc-front">
+            <div class="fc-label">englisches wort</div>
+            <div class="fc-main" id="fc-en">–</div>
+            <div class="fc-sub" id="fc-cat-badge"></div>
+            <div class="fc-hint">Klicken zum Umdrehen</div>
+          </div>
+          <div class="fc-back">
+            <div class="fc-label">deutsche Übersetzung</div>
+            <div class="fc-main" style="font-size:20px" id="fc-de">–</div>
+            <div class="fc-sentence" id="fc-sen-en">–</div>
+            <div class="fc-sentence" style="margin-top:6px" id="fc-sen-de">–</div>
+          </div>
+        </div>
+      </div>
+      <div class="fc-counter" id="fc-counter">1 / 50</div>
+      <div class="fc-controls">
+        <button class="fc-btn" onclick="fcPrev()">← Zurück</button>
+        <button class="fc-btn primary" onclick="fcNext()">Weiter →</button>
+        <button class="fc-btn" onclick="fcShuffle()">Mischen 🔀</button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+const vocab = [
+  { en: "Deploy", de: "Bereitstellen / Deployen", cat: "Infrastruktur", sen_en: "We need to deploy the new version to the production server tonight.", sen_de: "Wir müssen die neue Version heute Abend auf dem Produktionsserver bereitstellen." },
+  { en: "Repository", de: "Versionsverwaltungs-Archiv", cat: "Entwicklung", sen_en: "Please push your changes to the main repository before the end of the day.", sen_de: "Bitte lade deine Änderungen bis Ende des Tages ins Haupt-Repository hoch." },
+  { en: "Commit", de: "Änderung speichern (Git)", cat: "Entwicklung", sen_en: "Make sure to write a clear commit message so others understand your changes.", sen_de: "Achte darauf, eine klare Commit-Nachricht zu schreiben, damit andere deine Änderungen verstehen." },
+  { en: "Branch", de: "Entwicklungszweig", cat: "Entwicklung", sen_en: "Create a new branch for each feature you develop to keep the codebase clean.", sen_de: "Erstelle für jede Funktion einen neuen Branch, um den Code sauber zu halten." },
+  { en: "Pull Request", de: "Zusammenführungsanfrage", cat: "Entwicklung", sen_en: "Submit a pull request when your feature is ready for code review.", sen_de: "Stelle einen Pull Request ein, wenn deine Funktion für die Code-Überprüfung bereit ist." },
+  { en: "Merge", de: "Zusammenführen", cat: "Entwicklung", sen_en: "We will merge the feature branch into main after the review is approved.", sen_de: "Wir führen den Feature-Branch nach genehmigter Prüfung in den Main-Branch zusammen." },
+  { en: "Pipeline", de: "Automatisierungsprozess", cat: "Infrastruktur", sen_en: "The CI/CD pipeline automatically builds and tests the code on every push.", sen_de: "Die CI/CD-Pipeline erstellt und testet den Code automatisch bei jedem Push." },
+  { en: "Container", de: "Softwarecontainer", cat: "Infrastruktur", sen_en: "We use Docker containers to ensure the app runs the same in every environment.", sen_de: "Wir verwenden Docker-Container, damit die App in jeder Umgebung gleich läuft." },
+  { en: "Microservice", de: "Mikrodienst", cat: "Infrastruktur", sen_en: "Each microservice handles one specific part of the platform independently.", sen_de: "Jeder Mikrodienst übernimmt unabhängig einen bestimmten Teil der Plattform." },
+  { en: "API", de: "Programmierschnittstelle", cat: "Entwicklung", sen_en: "The frontend communicates with the backend through a REST API.", sen_de: "Das Frontend kommuniziert über eine REST-API mit dem Backend." },
+  { en: "Endpoint", de: "Schnittstellen-Endpunkt", cat: "Entwicklung", sen_en: "We added a new API endpoint to retrieve user profile data.", sen_de: "Wir haben einen neuen API-Endpunkt hinzugefügt, um Benutzerprofildaten abzurufen." },
+  { en: "Latency", de: "Verzögerung / Latenz", cat: "Infrastruktur", sen_en: "High latency in the database queries is slowing down the platform.", sen_de: "Hohe Latenz bei Datenbankabfragen verlangsamt die Plattform." },
+  { en: "Scalability", de: "Skalierbarkeit", cat: "Infrastruktur", sen_en: "Scalability is critical when designing a platform for millions of users.", sen_de: "Skalierbarkeit ist entscheidend beim Entwurf einer Plattform für Millionen von Nutzern." },
+  { en: "Refactor", de: "Code umstrukturieren", cat: "Entwicklung", sen_en: "We should refactor this module to improve readability and performance.", sen_de: "Wir sollten dieses Modul umstrukturieren, um Lesbarkeit und Leistung zu verbessern." },
+  { en: "Debugging", de: "Fehlersuche", cat: "Entwicklung", sen_en: "I spent the afternoon debugging a tricky issue in the payment service.", sen_de: "Ich verbrachte den Nachmittag damit, ein kniffliges Problem im Zahlungsdienst zu beheben." },
+  { en: "Dependency", de: "Abhängigkeit", cat: "Entwicklung", sen_en: "Make sure to update the dependency versions before deploying the new release.", sen_de: "Stelle sicher, dass du die Abhängigkeiten vor dem Deployment des neuen Releases aktualisierst." },
+  { en: "Logging", de: "Protokollierung", cat: "Infrastruktur", sen_en: "Proper logging helps us track down errors quickly in production.", sen_de: "Richtige Protokollierung hilft uns, Fehler in der Produktion schnell aufzuspüren." },
+  { en: "Authentication", de: "Authentifizierung", cat: "Sicherheit", sen_en: "We implemented two-factor authentication to improve platform security.", sen_de: "Wir haben die Zwei-Faktor-Authentifizierung implementiert, um die Plattformsicherheit zu verbessern." },
+  { en: "Authorization", de: "Autorisierung", cat: "Sicherheit", sen_en: "Authorization checks ensure users can only access their own data.", sen_de: "Autorisierungsprüfungen stellen sicher, dass Benutzer nur auf ihre eigenen Daten zugreifen können." },
+  { en: "Token", de: "Zugriffstoken", cat: "Sicherheit", sen_en: "The API uses JWT tokens to authenticate requests from the client.", sen_de: "Die API verwendet JWT-Tokens, um Anfragen vom Client zu authentifizieren." },
+  { en: "Encryption", de: "Verschlüsselung", cat: "Sicherheit", sen_en: "All sensitive user data is stored with AES encryption.", sen_de: "Alle sensiblen Benutzerdaten werden mit AES-Verschlüsselung gespeichert." },
+  { en: "Firewall", de: "Firewall / Netzwerkschutz", cat: "Sicherheit", sen_en: "The firewall blocks all unauthorized access to the internal network.", sen_de: "Die Firewall blockiert jeden unbefugten Zugriff auf das interne Netzwerk." },
+  { en: "Load Balancer", de: "Lastverteiler", cat: "Infrastruktur", sen_en: "The load balancer distributes incoming traffic evenly across all servers.", sen_de: "Der Lastverteiler verteilt den eingehenden Datenverkehr gleichmäßig auf alle Server." },
+  { en: "Cache", de: "Zwischenspeicher", cat: "Infrastruktur", sen_en: "We store frequently accessed data in a cache to reduce database load.", sen_de: "Wir speichern häufig abgerufene Daten in einem Zwischenspeicher, um die Datenbank zu entlasten." },
+  { en: "Queue", de: "Warteschlange", cat: "Infrastruktur", sen_en: "Background jobs are processed asynchronously using a message queue.", sen_de: "Hintergrundaufgaben werden asynchron über eine Nachrichtenwarteschlange verarbeitet." },
+  { en: "Database", de: "Datenbank", cat: "Daten", sen_en: "The platform stores all user records in a relational database.", sen_de: "Die Plattform speichert alle Benutzerdatensätze in einer relationalen Datenbank." },
+  { en: "Query", de: "Datenbankabfrage", cat: "Daten", sen_en: "This SQL query retrieves all active users who logged in last week.", sen_de: "Diese SQL-Abfrage ruft alle aktiven Benutzer ab, die sich letzte Woche angemeldet haben." },
+  { en: "Migration", de: "Datenmigration", cat: "Daten", sen_en: "We ran a database migration to add the new user_roles table.", sen_de: "Wir führten eine Datenbankmigrierung durch, um die neue Tabelle user_roles hinzuzufügen." },
+  { en: "Schema", de: "Datenbankschema", cat: "Daten", sen_en: "The schema defines the structure of all tables in our database.", sen_de: "Das Schema definiert die Struktur aller Tabellen in unserer Datenbank." },
+  { en: "Index", de: "Datenbankindex", cat: "Daten", sen_en: "Adding an index to the email column made the login queries much faster.", sen_de: "Das Hinzufügen eines Index zur E-Mail-Spalte hat die Anmeldeabfragen deutlich beschleunigt." },
+  { en: "Environment", de: "Umgebung (Dev/Prod)", cat: "Infrastruktur", sen_en: "Never test new code directly in the production environment.", sen_de: "Teste neuen Code niemals direkt in der Produktionsumgebung." },
+  { en: "Version Control", de: "Versionsverwaltung", cat: "Entwicklung", sen_en: "We use Git for version control to track every change in the codebase.", sen_de: "Wir verwenden Git zur Versionsverwaltung, um jede Änderung im Code nachzuverfolgen." },
+  { en: "Review", de: "Überprüfung / Review", cat: "Prozesse", sen_en: "Every pull request requires at least one approval from a code review.", sen_de: "Jeder Pull Request erfordert mindestens eine Genehmigung durch ein Code-Review." },
+  { en: "Sprint", de: "Entwicklungszyklus (Scrum)", cat: "Prozesse", sen_en: "We plan new features at the beginning of each two-week sprint.", sen_de: "Wir planen neue Funktionen zu Beginn jedes zweiwöchigen Sprints." },
+  { en: "Backlog", de: "Aufgabenliste / Rückstand", cat: "Prozesse", sen_en: "The product owner prioritizes items in the backlog before each sprint.", sen_de: "Der Product Owner priorisiert die Einträge im Backlog vor jedem Sprint." },
+  { en: "Ticket", de: "Aufgaben-Ticket", cat: "Prozesse", sen_en: "Create a ticket in Jira for every bug or feature you are working on.", sen_de: "Erstelle in Jira ein Ticket für jeden Fehler oder jede Funktion, an der du arbeitest." },
+  { en: "Release", de: "Veröffentlichung / Release", cat: "Prozesse", sen_en: "The next release is scheduled for the end of the month.", sen_de: "Das nächste Release ist für Ende des Monats geplant." },
+  { en: "Rollback", de: "Rücksetzung / Rollback", cat: "Infrastruktur", sen_en: "We had to perform a rollback after the deployment caused unexpected errors.", sen_de: "Wir mussten ein Rollback durchführen, nachdem das Deployment unerwartete Fehler verursacht hatte." },
+  { en: "Monitoring", de: "Überwachung", cat: "Infrastruktur", sen_en: "Our monitoring tools alert us instantly if the server goes down.", sen_de: "Unsere Überwachungstools benachrichtigen uns sofort, wenn der Server ausfällt." },
+  { en: "Uptime", de: "Betriebszeit / Verfügbarkeit", cat: "Infrastruktur", sen_en: "Our platform guarantees 99.9% uptime according to the service agreement.", sen_de: "Unsere Plattform garantiert laut Servicevertrag eine Verfügbarkeit von 99,9 %." },
+  { en: "Webhook", de: "Webhook / Ereignisbenachrichtigung", cat: "Entwicklung", sen_en: "The payment provider sends a webhook to confirm successful transactions.", sen_de: "Der Zahlungsanbieter sendet einen Webhook, um erfolgreiche Transaktionen zu bestätigen." },
+  { en: "Middleware", de: "Zwischenschicht / Middleware", cat: "Entwicklung", sen_en: "The authentication middleware checks every request before it reaches the controller.", sen_de: "Die Authentifizierungs-Middleware prüft jede Anfrage, bevor sie den Controller erreicht." },
+  { en: "Unit Test", de: "Einheitstest", cat: "Entwicklung", sen_en: "Write a unit test for every new function you add to the codebase.", sen_de: "Schreibe einen Einheitstest für jede neue Funktion, die du dem Code hinzufügst." },
+  { en: "Integration Test", de: "Integrationstest", cat: "Entwicklung", sen_en: "Integration tests verify that different modules work correctly together.", sen_de: "Integrationstests überprüfen, ob verschiedene Module korrekt zusammenarbeiten." },
+  { en: "Sandbox", de: "Testumgebung / Sandbox", cat: "Infrastruktur", sen_en: "Use the sandbox environment to test the payment flow without real charges.", sen_de: "Verwende die Sandbox-Umgebung, um den Zahlungsfluss ohne echte Abbuchungen zu testen." },
+  { en: "Throughput", de: "Datendurchsatz / Verarbeitungsrate", cat: "Infrastruktur", sen_en: "We need to increase system throughput to handle more requests per second.", sen_de: "Wir müssen den Systemdurchsatz erhöhen, um mehr Anfragen pro Sekunde zu verarbeiten." },
+  { en: "Cluster", de: "Serververbund / Cluster", cat: "Infrastruktur", sen_en: "The Kubernetes cluster automatically restarts failed containers.", sen_de: "Der Kubernetes-Cluster startet ausgefallene Container automatisch neu." },
+  { en: "Documentation", de: "Dokumentation", cat: "Prozesse", sen_en: "Always update the documentation when you change the behavior of an API.", sen_de: "Aktualisiere immer die Dokumentation, wenn du das Verhalten einer API änderst." },
+  { en: "Stakeholder", de: "Interessenvertreter / Auftraggeber", cat: "Prozesse", sen_en: "We present the sprint results to all stakeholders at the end of each cycle.", sen_de: "Wir präsentieren die Sprint-Ergebnisse allen Interessenvertretern am Ende jedes Zyklus." },
+  { en: "Benchmark", de: "Leistungsvergleich / Benchmark", cat: "Entwicklung", sen_en: "Run a benchmark to compare the performance of the old and new algorithms.", sen_de: "Führe einen Benchmark durch, um die Leistung des alten und neuen Algorithmus zu vergleichen." },
+];
+
+let filtered = [...vocab];
+let currentCat = '';
+let currentSearch = '';
+let currentView = 'table';
+let fcIndex = 0;
+let fcFlipped = false;
+let fcOrder = vocab.map((_,i)=>i);
+
+function getFiltered() {
+  return vocab.filter(r => {
+    const q = currentSearch.toLowerCase();
+    const matchQ = !q || r.en.toLowerCase().includes(q) || r.de.toLowerCase().includes(q) || r.sen_en.toLowerCase().includes(q) || r.sen_de.toLowerCase().includes(q);
+    const matchCat = !currentCat || r.cat === currentCat;
+    return matchQ && matchCat;
+  });
+}
+
+function renderTable() {
+  const rows = getFiltered();
+  const tbody = document.getElementById('tbody');
+  const noRes = document.getElementById('no-results-table');
+  tbody.innerHTML = '';
+  if (rows.length === 0) { noRes.classList.remove('hidden'); return; }
+  noRes.classList.add('hidden');
+  rows.forEach((r, i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="num-cell">${vocab.indexOf(r)+1}</td>
+      <td><div class="en-word">${r.en}</div></td>
+      <td><div class="de-word">${r.de}</div></td>
+      <td><span class="badge cat-${r.cat}">${r.cat}</span></td>
+      <td><div class="sentence-en">${r.sen_en}</div><div class="sentence-de">${r.sen_de}</div></td>
+      <td></td>
+    `;
+    tbody.appendChild(tr);
+  });
+  document.getElementById('count-shown').textContent = rows.length;
+}
+
+function renderCards() {
+  const rows = getFiltered();
+  const grid = document.getElementById('cards-grid');
+  const noRes = document.getElementById('no-results-cards');
+  grid.innerHTML = '';
+  if (rows.length === 0) { noRes.classList.remove('hidden'); return; }
+  noRes.classList.add('hidden');
+  rows.forEach(r => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <div class="card-header">
+        <div class="card-num">#${vocab.indexOf(r)+1}</div>
+        <span class="badge cat-${r.cat}">${r.cat}</span>
+      </div>
+      <div class="card-en">${r.en}</div>
+      <div class="card-de">${r.de}</div>
+      <div class="card-divider"></div>
+      <div class="card-sentence-en">${r.sen_en}</div>
+      <div class="card-sentence-de">${r.sen_de}</div>
+    `;
+    grid.appendChild(card);
+  });
+  document.getElementById('count-shown').textContent = rows.length;
+}
+
+function renderFlash() {
+  const r = vocab[fcOrder[fcIndex]];
+  document.getElementById('fc-en').textContent = r.en;
+  document.getElementById('fc-de').textContent = r.de;
+  document.getElementById('fc-sen-en').textContent = r.sen_en;
+  document.getElementById('fc-sen-de').textContent = r.sen_de;
+  document.getElementById('fc-cat-badge').innerHTML = `<span class="badge cat-${r.cat}">${r.cat}</span>`;
+  document.getElementById('fc-counter').textContent = `${fcIndex+1} / ${fcOrder.length}`;
+  document.getElementById('fc-inner').classList.remove('flipped');
+  fcFlipped = false;
+
+  const prog = document.getElementById('fc-progress');
+  prog.innerHTML = '';
+  fcOrder.forEach((_, i) => {
+    const dot = document.createElement('div');
+    dot.className = 'fc-dot' + (i < fcIndex ? ' seen' : i === fcIndex ? ' current' : '');
+    prog.appendChild(dot);
+  });
+}
+
+function flipCard() {
+  fcFlipped = !fcFlipped;
+  document.getElementById('fc-inner').classList.toggle('flipped', fcFlipped);
+}
+function fcNext() {
+  if (fcIndex < fcOrder.length - 1) { fcIndex++; renderFlash(); }
+}
+function fcPrev() {
+  if (fcIndex > 0) { fcIndex--; renderFlash(); }
+}
+function fcShuffle() {
+  fcOrder = fcOrder.sort(() => Math.random() - 0.5);
+  fcIndex = 0;
+  renderFlash();
+}
+
+function setView(v) {
+  currentView = v;
+  document.querySelectorAll('.view-btn').forEach(b => b.classList.toggle('active', b.dataset.view === v));
+  document.getElementById('view-table').classList.toggle('hidden', v !== 'table');
+  document.getElementById('view-cards').classList.toggle('hidden', v !== 'cards');
+  document.getElementById('view-flash').classList.toggle('hidden', v !== 'flash');
+  document.getElementById('stats-bar').classList.toggle('hidden', v === 'flash');
+  if (v === 'table') renderTable();
+  else if (v === 'cards') renderCards();
+  else renderFlash();
+}
+
+document.getElementById('search').addEventListener('input', e => {
+  currentSearch = e.target.value;
+  if (currentView === 'table') renderTable();
+  else if (currentView === 'cards') renderCards();
+});
+document.getElementById('cat-filters').addEventListener('click', e => {
+  const btn = e.target.closest('.cat-btn');
+  if (!btn) return;
+  currentCat = btn.dataset.cat;
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.toggle('active', b === btn));
+  if (currentView === 'table') renderTable();
+  else if (currentView === 'cards') renderCards();
+});
+document.querySelectorAll('.view-btn').forEach(b => b.addEventListener('click', () => setView(b.dataset.view)));
+
+document.addEventListener('keydown', e => {
+  if (currentView === 'flash') {
+    if (e.key === 'ArrowRight') fcNext();
+    if (e.key === 'ArrowLeft') fcPrev();
+    if (e.key === ' ') { e.preventDefault(); flipCard(); }
+  }
+});
+
+renderTable();
+</script>
+</body>
+</html>
